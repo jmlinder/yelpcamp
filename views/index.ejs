@@ -1,4 +1,4 @@
-<% include partials/header %> 
+<% include partials/header %>
 
 <div class="container">
     <header class="jumbotron">
@@ -9,7 +9,7 @@
         </p>
     </header>
 
-<!-- grid style -->
+    <!-- grid style -->
 
     <div class="row">
         <% campgrounds.forEach((campground) => { %>
@@ -20,27 +20,29 @@
                     <h5 class="card-title text-center">
                         <%= campground.name %>
                     </h5>
+                    <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
                 </div>
             </div>
         </div>
         <% }); %>
     </div>
 
-<hr>
+    <hr>
 
- <!-- card column style -->
+    <!-- card column style -->
 
     <div class="card-columns">
         <% campgrounds.forEach((campground) => { %>
-            <div class="card">
-                <img class="card-img-top" src="<%= campground.image %>" alt="<%= campground.name %>>" style="height: 100%;">
-                <div class="card-body">
-                    <h5 class="card-title text-center">
-                        <%= campground.name %>
-                    </h5>
-                </div>
+        <div class="card">
+            <img class="card-img-top" src="<%= campground.image %>" alt="<%= campground.name %>>" style="height: 100%;">
+            <div class="card-body">
+                <h5 class="card-title text-center">
+                    <%= campground.name %>
+                </h5>
+                <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
             </div>
+        </div>
         <% }); %>
     </div>
 
-<% include partials/footer %>
+    <% include partials/footer %>
