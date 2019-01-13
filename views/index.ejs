@@ -20,7 +20,9 @@
                     <h5 class="card-title text-center">
                         <%= campground.name %>
                     </h5>
-                    <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
+                    <div class="text-center">
+                        <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,7 +41,9 @@
                 <h5 class="card-title text-center">
                     <%= campground.name %>
                 </h5>
-                <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
+                <div class="text-center">
+                    <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
+                </div>
             </div>
         </div>
         <% }); %>
