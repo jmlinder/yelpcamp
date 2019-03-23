@@ -42,29 +42,24 @@ router.get('/new', isLoggedIn, (req, res) => res.render('campgrounds/new'));
 
 // SHOW
 router.get('/:id', (req, res) => {
-  Campground.findById(req.params.id).populate('comments').exec((err, foundCampground) => {
+  Campground.findById(req.params.id).populate('comments').exec((err, campground) => {
     if (err) {
       console.log(err);
+    } else {
+      res.render('campgrounds/show', { campground });
     }
-    res.render('campgrounds/show', {
-      campground: foundCampground,
-    });
   });
 });
 
 // EDIT CAMPGROUNDS
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
-    if (err) {
-      res.redirect('/campgrounds');
-    } else {
-      res.render('campgrounds/edit', { campground });
-    }
+    res.render('campgrounds/edit', { campground });
   });
 });
 
 // UPDATE CAMPGROUND ROUTE
-router.put('/:id', (req, res) => {
+router.put('/:id', checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
     if (err) {
       res.redirect('/campgrounds');
@@ -75,7 +70,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE CAMPGROUND
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       res.redirect('/campgrounds');
@@ -91,6 +86,26 @@ function isLoggedIn(req, res, next) {
     return next();
   }
   res.redirect('/login');
+}
+
+//checks if user owns the campground
+function checkCampgroundOwnership(req, res, next) {
+  if (req.isAuthenticated()) {
+    Campground.findById(req.params.id, (err, campground) => {
+      if (err) {
+        res.redirect('/campgrounds');
+      } else {
+        // does user own campground?
+        if (campground.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          res.send('you do not have permission to edit this campground');
+        }
+      }
+    });
+  } else {
+    res.redirect('back');
+  }
 }
 
 module.exports = router;
