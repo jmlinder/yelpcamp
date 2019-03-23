@@ -13,3 +13,8 @@
 .card .row {
   padding: 9px;
 }
+
+#delete-form {
+  display: inline;
+
+}

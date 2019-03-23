@@ -7,6 +7,7 @@ const seedDB = require('./seeds');
 const Campground = require('./models/campground');
 const Comment = require('./models/comment');
 const User = require('./models/user');
+const methodOverride = require('method-override');
 
 const commentRoutes = require('./routes/comments');
 const campgroundRoutes = require('./routes/campgrounds');
@@ -19,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/yelpcamp', { useNewUrlParser: true }
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public')); // __dirname is the path of the current file
 app.set('view engine', 'ejs');
+app.use(methodOverride('_method'));
 
 // Passport configuration
 app.use(require('express-session')({
