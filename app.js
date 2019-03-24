@@ -17,7 +17,7 @@ const indexRoutes = require('./routes/index');
 const app = express();
 
 // App settings
-mongoose.connect('mongodb+srv://joe:Testing1-password@cluster0-dhfls.mongodb.net/yelp_camp?retryWrites=true');
+mongoose.connect('DBURL');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public')); // __dirname is the path of the current file
 app.set('view engine', 'ejs');
