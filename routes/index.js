@@ -8,12 +8,13 @@ router.get('/', (req, res) => res.render('landing'));
 //====================
 // Auth Routes
 //====================
-// show register form
+
+// show sign up form
 router.get('/register', (req, res) => {
   res.render('register');
 });
 
-// handle sign up logic
+// Sign up logic
 router.post('/register', (req, res) => {
   const newUser = new User({ username: req.body.username });
   User.register(newUser, req.body.password, (err, user) => {
@@ -32,6 +33,7 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+// login logic
 // router.post('/post', MIDDLEWARE, callback)
 router.post('/login', passport.authenticate('local',
   {

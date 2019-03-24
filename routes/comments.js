@@ -3,11 +3,7 @@ const router = express.Router({ mergeParams: true });
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
 
-// ==========================
-// COMMENTS ROUTES
-// ==========================
-
-// NEW
+// New comment
 router.get('/new', isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
@@ -18,7 +14,7 @@ router.get('/new', isLoggedIn, (req, res) => {
   });
 });
 
-// POST
+// Create comment
 router.post('/', isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
@@ -42,6 +38,30 @@ router.post('/', isLoggedIn, (req, res) => {
     }
   });
 });
+
+// Edit comment
+router.get('/:comment_id/edit', (req, res) => {
+  Comment.findById(req.params.comment_id, (err, comment) => {
+    if (err) {
+      res.redirect('back');
+    } else {
+      res.render('comments/edit', { campground_id: req.params.id, comment });
+    }
+  });
+});
+
+// Edit logic
+router.put('/:comment_id', (req, res) => {
+  Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, comment) => {
+    if (err) {
+      res.redirect('back');
+    } else {
+      res.redirect('/campgrounds/' + req.params.id);
+    }
+  });
+});
+
+// Delete comment
 
 // checks if user is logged in
 function isLoggedIn(req, res, next) {

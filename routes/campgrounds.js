@@ -12,7 +12,10 @@ router.get('/', (req, res) => {
   });
 });
 
-// CREATE
+// Create campground page
+router.get('/new', isLoggedIn, (req, res) => res.render('campgrounds/new'));
+
+// Create campground logic
 router.post('/', isLoggedIn, (req, res) => {
   // ES6 destructuring:
   // const {name, image} = req.body.{}
@@ -37,10 +40,7 @@ router.post('/', isLoggedIn, (req, res) => {
   });
 });
 
-// NEW
-router.get('/new', isLoggedIn, (req, res) => res.render('campgrounds/new'));
-
-// SHOW
+// Show more info about campground
 router.get('/:id', (req, res) => {
   Campground.findById(req.params.id).populate('comments').exec((err, campground) => {
     if (err) {
@@ -51,14 +51,14 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// EDIT CAMPGROUNDS
+// Edit campground
 router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     res.render('campgrounds/edit', { campground });
   });
 });
 
-// UPDATE CAMPGROUND ROUTE
+// Edit campground logic
 router.put('/:id', checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
     if (err) {
@@ -69,7 +69,7 @@ router.put('/:id', checkCampgroundOwnership, (req, res) => {
   });
 });
 
-// DELETE CAMPGROUND
+// Delete campground
 router.delete('/:id', checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
