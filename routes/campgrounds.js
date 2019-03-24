@@ -22,7 +22,6 @@ router.post('/', isLoggedIn, (req, res) => {
   // when the property and variable are the same, ES6 lets you use the following
   // (instead of {name: name})
   // const newCampground = { name, image };
-  console.log(req.user);
   Campground.create({
     name: req.body.name,
     image: req.body.image,
