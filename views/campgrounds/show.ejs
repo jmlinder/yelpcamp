@@ -17,6 +17,7 @@
 					<h1><%= campground.name %></h1>
 					<p><%= campground.description %></p>
 					<p><em>Submitted by <%= campground.author.username %></em></p>
+					<!-- show/hide edit/delete buttons -->
 					<% if(currentUser && campground.author.id.equals(currentUser._id)){ %>
 					<a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
 					<form class="delete-form" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="POST">
@@ -29,6 +30,7 @@
 				<div class="text-right">
 					<a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add a new
 						comment</a>
+					<!-- shows all comments -->
 				</div> <% campground.comments.forEach((comment) => { %>
 				<div class="row">
 					<div class="col-md-12">
@@ -37,6 +39,8 @@
 						<p>
 							<%= comment.text %>
 						</p>
+						<!-- show/hide edit/delete buttons -->
+						<% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
 						<a href="/campgrounds/<%= campground.id %>/comments/<%= comment._id%>/edit"
 							class="btn btn-xs btn-warning">Edit</a>
 						<form class="delete-form"
@@ -44,6 +48,7 @@
 							method="POST">
 							<button class="btn btn-xs btn-danger">Delete</button>
 						</form>
+						<% } %>
 					</div>
 				</div>
 				<% }) %>
