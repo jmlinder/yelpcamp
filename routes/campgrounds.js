@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Campground = require('../models/campground');
+const middleware = require('../middleware/index.js');
 
 // INDEX
 router.get('/', (req, res) => {
@@ -13,10 +14,10 @@ router.get('/', (req, res) => {
 });
 
 // Create campground page
-router.get('/new', isLoggedIn, (req, res) => res.render('campgrounds/new'));
+router.get('/new', middleware.isLoggedIn, (req, res) => res.render('campgrounds/new'));
 
 // Create campground logic
-router.post('/', isLoggedIn, (req, res) => {
+router.post('/', middleware.isLoggedIn, (req, res) => {
   // ES6 destructuring:
   // const {name, image} = req.body.{}
   // when the property and variable are the same, ES6 lets you use the following
@@ -34,7 +35,6 @@ router.post('/', isLoggedIn, (req, res) => {
     if (err) {
       console.log(err);
     }
-    console.log(newlyCreated);
     res.redirect('/campgrounds');
   });
 });
@@ -51,14 +51,14 @@ router.get('/:id', (req, res) => {
 });
 
 // Edit campground
-router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
+router.get('/:id/edit', middleware.checkCampgroundOwnership, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     res.render('campgrounds/edit', { campground });
   });
 });
 
 // Edit campground logic
-router.put('/:id', checkCampgroundOwnership, (req, res) => {
+router.put('/:id', middleware.checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
     if (err) {
       res.redirect('/campgrounds');
@@ -69,7 +69,7 @@ router.put('/:id', checkCampgroundOwnership, (req, res) => {
 });
 
 // Delete campground
-router.delete('/:id', checkCampgroundOwnership, (req, res) => {
+router.delete('/:id', middleware.checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       res.redirect('/campgrounds');
@@ -78,33 +78,5 @@ router.delete('/:id', checkCampgroundOwnership, (req, res) => {
     }
   });
 });
-
-// checks if user is logged in
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
-
-//checks if user owns the campground
-function checkCampgroundOwnership(req, res, next) {
-  if (req.isAuthenticated()) {
-    Campground.findById(req.params.id, (err, campground) => {
-      if (err) {
-        res.redirect('/campgrounds');
-      } else {
-        // does user own campground?
-        if (campground.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.send('you do not have permission to edit this campground');
-        }
-      }
-    });
-  } else {
-    res.redirect('back');
-  }
-}
 
 module.exports = router;
