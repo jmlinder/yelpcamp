@@ -17,7 +17,7 @@ const indexRoutes = require('./routes/index');
 const app = express();
 
 // App settings
-mongoose.connect('mongodb+srv://joe:p~=b49oddOL!k%3X3H]p@cluster0-dhfls.mongodb.net/yelp_camp?retryWrites=true', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://joe:p~=b49oddOL!k%3X3H]p@cluster0-dhfls.mongodb.net/yelp_camp?retryWrites=true');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public')); // __dirname is the path of the current file
 app.set('view engine', 'ejs');
