@@ -63,7 +63,6 @@ router.put('/:comment_id', (req, res) => {
 
 // Delete comment
 router.delete('/:comment_id', (req, res) => {
-  console.log(req.params);
   Comment.findByIdAndRemove(req.params.comment_id, (err) => {
     if (err) {
       res.redirect('back');
