@@ -3,11 +3,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const seedDB = require('./seeds');
 const Campground = require('./models/campground');
 const Comment = require('./models/comment');
 const User = require('./models/user');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
+// const seedDB = require('./seeds');
 
 const commentRoutes = require('./routes/comments');
 const campgroundRoutes = require('./routes/campgrounds');
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public')); // __dirname is the path of the current file
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
+app.use(flash());
 // seedDB(); // seeds the database
 
 // Passport configuration
@@ -34,8 +36,11 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
   next();
 });
 

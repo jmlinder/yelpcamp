@@ -5,10 +5,6 @@ const User = require('../models/user');
 
 router.get('/', (req, res) => res.render('landing'));
 
-//====================
-// Auth Routes
-//====================
-
 // show sign up form
 router.get('/register', (req, res) => {
   res.render('register');
@@ -19,10 +15,11 @@ router.post('/register', (req, res) => {
   const newUser = new User({ username: req.body.username });
   User.register(newUser, req.body.password, (err, user) => {
     if (err) {
-      console.log(err);
-      return res.render('register');
+      req.flash('error', err.message);
+      return res.redirect('register');
     }
     passport.authenticate('local')(req, res, () => {
+      req.flash('success', 'Welcome to YelpCamp, ' + user.username + '.');
       res.redirect('/campgrounds');
     });
   })
@@ -41,17 +38,12 @@ router.post('/login', passport.authenticate('local',
     failureRedirect: '/login'
   }));
 
+
+// logout logic
 router.get('/logout', (req, res) => {
   req.logout();
+  req.flash('success', 'logged you out!');
   res.redirect('/campgrounds');
 });
-
-// Checks if user is logged in
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
 
 module.exports = router;
