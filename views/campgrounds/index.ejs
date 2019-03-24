@@ -9,8 +9,6 @@
         </p>
     </header>
 
-    <!-- card column style -->
-
     <div class="card-columns">
         <% campgrounds.forEach((campground) => { %>
         <div class="card">
@@ -26,28 +24,5 @@
         </div>
         <% }); %>
     </div>
-
-    <!-- grid style
-        -GRID STYLE-
-        <div class="row">
-            <% campgrounds.forEach((campground) => { %>
-            <div class="col-lg-4 col-md-6 col-xs-12 mt-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="<%= campground.image %>" alt="<%= campground.name %>>"
-                        style="height: 100%;">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">
-                            <%= campground.name %>
-                        </h5>
-                        <div class="text-center">
-                            <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <% }); %>
-        </div>
-    
-        <hr> -->
 
     <% include ../partials/footer %>

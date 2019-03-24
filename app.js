@@ -16,16 +16,12 @@ const indexRoutes = require('./routes/index');
 const app = express();
 
 // App settings
-// seedDB();
 mongoose.connect('mongodb://localhost:27017/yelpcamp', { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public')); // __dirname is the path of the current file
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
-app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
-  next();
-});
+// seedDB(); // seeds the database
 
 // Passport configuration
 app.use(require('express-session')({
@@ -38,6 +34,10 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 
 // Route logic
 app.use(indexRoutes);
